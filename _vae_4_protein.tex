@@ -7,26 +7,62 @@
 
 \begin{document}
 % Enter presentation title:
-\title{Presentation Title}
-% Enter presentation information:
+\title{Target-aware Variational Auto-encoders for Ligand Generation with Multimodal Protein Representation Learning}
 \information%
-% Enter link to research paper (optional; comment line if not needed):
-[https://github.com/pmichaillat/latex-presentation]%
-% Enter presentation authors:
-{Author 1, Author 2}%
-% Enter presentation location and date (optional; comment line if not needed):
-{Location -- Date}
+[https://iopscience.iop.org/article/10.1088/2632-2153/ad3ee4]%
+{Nhat Khang Ngo, Truong Son Hy}%
 \frame{\titlepage}
 
-% Fill out content of presentation:
 \begin{frame}
-\frametitle{Slide 1}
-
-\end{frame}
-
-\begin{frame}
-\frametitle{Slide 2}
-
-\end{frame}
+    \frametitle{Introduction}
+    Drug discovery is a complex and expensive process that involves multiple stages and often takes years of development. The first stage is to design novel drug-like compounds that have high binding affinities to protein targets. This involves searching for candidates and measuring drug-target affinities (DTA), which are critical for identifying potential candidates and avoiding inefficient ones for clinical trials.
+    
+    % \cite{hughes2011principles, verkhivker2001binding, burley2019rcsb}
+    \end{frame}
+    
+    \begin{frame}
+    \frametitle{Motivation}
+    Current methods for searching potential candidates rely on virtual screenings, professional software, and expert evaluation. Drug-target affinities are typically predicted using atomistic molecular dynamics simulations, which are computationally expensive and time-consuming, making them infeasible for large-scale protein-ligand complexes.
+    
+    % \cite{verkhivker2001binding, burley2019rcsb}
+    \end{frame}
+    
+    \begin{frame}
+    \frametitle{Deep Generative Models for Drug Design}
+    Deep generative models have been proposed to reduce the workload for wet-lab experiments by automating the generation and optimization of molecular properties. However, these models are often slow when enhancing binding affinity or other computationally expensive properties due to the need for reinforcement learning frameworks.
+    
+    % \cite{NEURIPS2018_d60678e8, pmlr-v80-jin18a, pmlr-v119-jin20a, luo2021a, Simonovsky2018GraphVAETG, de2018molgan, pmlr-v139-luo21a, gapsys2022pre, burley2019rcsb, verkhivker2001binding}
+    \end{frame}
+    
+    \begin{frame}
+    \frametitle{Protein Representation Learning}
+    Proteins can be represented as sequences of amino acids, 2D graphs at residue level, or 3D point clouds at atom level. Advanced methods leverage language models, graph neural networks (GNNs), and convolutional neural networks (CNNs) to learn from these representations.
+    
+    % \cite{pmlr-v162-notin22a, 10.1093/bioinformatics/btac020, asgari2019probabilistic, WU202118, 10.1093/bioinformatics/bty178, NEURIPS2019_03573b32, townshend2020atom3d, jing2021equivariant, jing2021learning, 10.1093/nargab/lqac004}
+    \end{frame}
+    
+    \begin{frame}
+    \frametitle{Contributions}
+    \begin{itemize}
+        \item Developed \textbf{TargetVAE}, a conditional VAE model to generate drug-like molecules with high binding affinity to given protein structures.
+        \item Adapted techniques from computer vision to transfer weights from an unconditional to a conditional VAE, enhancing molecule generation diversity.
+        \item Introduced \textbf{Protein Multimodal Network (PMXN)}, which unifies sequence and structural modalities of proteins for improved prediction of binding affinities.
+    \end{itemize}
+    \end{frame}
+    
+    \begin{frame}
+    \frametitle{Background: Rotational Invariant Features}
+    Geometric features of protein structures can be represented as tuples of scalar and vector features, which are respectively invariant and equivariant to geometric transformations in Euclidean space. The geometric vector perceptron (GVP) is used to transform input features, ensuring the desired properties of invariance and equivariance.
+    
+    % \cite{jing2021learning}
+    \end{frame}
+    
+    \begin{frame}
+    \frametitle{Variational Auto-Encoders (VAEs)}
+    VAEs consist of a generative model and an inference model, using a probabilistic decoder and a prior to define a joint distribution between latent variables and data. Conditional VAEs integrate auxiliary covariates to enhance generative modeling, trained to maximize the conditional evidence lower bound (ELBO).
+    
+    % \cite{kingma2013auto, NIPS2015_8d55a249, Zheng_2019_CVPR, ivanov2018variational, wan2021high}
+    \end{frame}
+    
 
 \end{document}

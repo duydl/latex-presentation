@@ -18,8 +18,8 @@
 \begin{itemize}
   \item \textbf{Context:} Analyzing geometric point sets, such as those from 3D scans, is crucial for applications like autonomous vehicles.
   \item \textbf{Challenges:} Point clouds must be invariant to permutations, and their local structures vary due to factors like scanning density.
-  \item \textbf{Prior Work:} PointNet directly processes point sets but lacks the ability to capture local geometric structures effectively.
-  \item \textbf{Our Approach:} Introducing PointNet++, a hierarchical network that processes points in a metric space to capture fine to coarse geometric structures.
+  \item \textbf{Prior Work:} PointNet directly processes 3D data but lacks the ability to capture local geometric structures effectively.
+  \item \textbf{New Approach:} Introducing PointNet++, a hierarchical network that processes points in a metric space to capture fine to coarse geometric structures.
 \end{itemize}
 % \begin{wrapfigure}{R}{7cm}
 %   \centering
@@ -46,9 +46,9 @@
 \frametitle{Problem Statement}
 \begin{itemize}
   \item \textbf{Metric Space Definition:} $\mathcal{X}=(M, d)$ where $M \subseteq \mathbb{R}^n$ and $d$ is the distance metric derived from Euclidean space.
-  \item \textbf{Challenge:} Non-uniform density of $M$ in ambient space, impacting the effectiveness of local pattern learning.
   \item \textbf{Goal:} Develop function $f$ that can process $\mathcal{X}$ to produce semantic outputs, such as classification or segmentation.
-  \item \textbf{Relevance:} Understanding and processing the varying densities and scales of point sets to extract meaningful semantic information.
+  \item \textbf{Challenge:} Non-uniform density of $M$, impacting the effectiveness of local pattern learning.
+  \item \textbf{Relevance:} Processing the varying densities and scales of point sets to extract meaningful semantic information.
 \end{itemize}
 \end{frame}
 
@@ -56,26 +56,30 @@
 \begin{frame}
 \frametitle{Review of PointNet}
 \begin{itemize}
-  \item PointNet processes unordered point sets directly, approximating any continuous set function.
-  \item Uses a multi-layer perceptron (MLP) to encode spatial information of each point.
+  \item PointNet processes unordered point sets directly, using a multi-layer perceptron (MLP) to encode spatial information of each point.
   \item Aggregates features using a max pooling operation, ensuring permutation invariance.
 \end{itemize}
-% \begin{equation}
-%     f(x_1, x_2, ..., x_n) = \gamma\left(\underset{i=1,...,n}{\mbox{MAX}}\left\{h(x_i)\right\}\right)
-% \end{equation}
+\begin{equation}
+    f(x_1, x_2, ..., x_n) = \gamma\left(\underset{i=1,...,n}{\mbox{MAX}}\left\{h(x_i)\right\}\right)
+\end{equation}
 \end{frame}
 
 \begin{frame}
 \frametitle{Hierarchical Point Set Feature Learning}
 \begin{itemize}
-  \item Builds a hierarchical grouping of points to abstract local regions progressively.
-  \item Integrates multiple levels of set abstraction:
-  \begin{itemize}
-    \item Sampling layer selects centroids via farthest point sampling (FPS).
-    \item Grouping layer forms local regions around these centroids.
-    \item PointNet layer encodes local regions into feature vectors.
-  \end{itemize}
+  \item Hierarchically grouping points to abstract local regions progressively.
+  % \item Integrates multiple levels of set abstraction:
+  % \begin{itemize}
+  %   \item Sampling layer selects centroids via farthest point sampling (FPS).
+  %   \item Grouping layer forms local regions around these centroids.
+  %   \item PointNet layer encodes local regions into feature vectors.
+  % \end{itemize}
 \end{itemize}
+\begin{figure}
+  \includegraphics[width=10cm]{./media/_pointnet/pnpp.pdf}
+  \caption{Hierarchical feature learning architecture in PointNet++.}
+  \label{fig:arch}
+\end{figure}
 \end{frame}
 
 \begin{frame}
@@ -84,23 +88,22 @@
   \item PointNet++ uses multi-scale grouping (MSG) and multi-resolution grouping (MRG) to handle varying densities.
   \item Adapts to local density changes, improving robustness and detail capture:
   \begin{itemize}
-    \item MSG captures multiple scales simultaneously.
-    \item MRG combines features across different resolutions.
+    \item MSG learn to combine the multi-scale features with random input dropout.
+    \item MRG combines features by concatenate lower-level layer with raw data processing in the local region.
   \end{itemize}
 \end{itemize}
-% \begin{wrapfigure}{R}{4cm}
-%     \includegraphics[width=4cm]{./fig/multiscale.pdf}
-%     \caption{Multi-scale and multi-resolution grouping in PointNet++.}
-%     \label{fig:multiscale}
-% \end{wrapfigure}
+  \begin{figure}
+      \includegraphics[width=4cm]{./media/_pointnet/multiscale.pdf}
+      \caption{Multi-scale and multi-resolution grouping in PointNet++.}
+      \label{fig:multiscale}
+  \end{figure}
 \end{frame}
 
 \begin{frame}
 \frametitle{Feature Propagation for Set Segmentation}
 \begin{itemize}
-  \item Hierarchical feature propagation strategy interpolates features from sampled to original points.
-  \item Inverse distance weighting ensures smooth feature transition across points.
-  \item Combines interpolated and directly linked features for enhanced context:
+  \item Hierarchical feature propagation strategy interpolates features from sampled to original points for original point set for segmentation.
+  \item Inverse distance weighting for KNN, MLP with ReLu for feature update. Repeated until get back the original point set with sematic features:
   \begin{equation}
     f^{(j)}(x) = \frac{\sum_{i=1}^{k}w_i (x) f_i^{(j)}}{\sum_{i=1}^k w_i (x)}
     \quad \text{where}\quad w_i(x) = \frac{1}{d(x,x_i)^p},\; j=1,...,C
@@ -109,7 +112,7 @@
 \end{frame}
 
 \begin{frame}
-\frametitle{Overview of Datasets}
+\frametitle{Experiments: Overview of Datasets}
 \begin{itemize}
     \item \textbf{MNIST:} 60k training and 10k testing samples of handwritten digits.
     \item \textbf{ModelNet40:} 9,843 training and 2,468 testing samples of 3D CAD models.
@@ -125,41 +128,17 @@
     \item \textbf{MNIST:} Images converted to 2D point clouds.
     \item \textbf{ModelNet40:} 3D point clouds sampled from mesh surfaces.
     \item Networks trained with 512 points for MNIST and 1024 points for ModelNet40.
-    \item Additional features (normals) and more points used for higher performance.
+    \item Additional features and more points used for higher performance.
+    \item Evaluating Robustness to Point Density Variation 
+    \begin{itemize}
+      \item Test robustness by randomly dropping points during test, reducing point density.
+      \item Effectiveness of multi-scale and resolution strategies.
+  \end{itemize}
 \end{itemize}
 \end{frame}
 
 \begin{frame}
-\frametitle{Results of 2D and 3D Point Set Classification}
-\begin{columns}
-    \column{0.5\textwidth}
-    \centering
-    % \includegraphics[width=\linewidth]{example-image-a} % Replace with actual image
-    % \captionof{figure}{Accuracy comparison on MNIST.}
-    
-    % \column{0.5\textwidth}
-    % \centering
-    % \includegraphics[width=\linewidth]{example-image-b} % Replace with actual image
-    % \captionof{figure}{ModelNet40 shape classification results.}
-\end{columns}
-\end{frame}
-
-\begin{frame}
-\frametitle{Evaluating Robustness to Point Density Variation}
-\begin{itemize}
-    \item Tested robustness by randomly dropping points during test.
-    \item Demonstrated strong performance despite reduced point density.
-    \item Multi-scale and resolution strategies maintain high accuracy.
-\end{itemize}
-% \begin{figure}
-%     \centering
-%     \includegraphics[width=0.8\linewidth]{example-image-c} % Replace with actual image
-%     \caption{Performance across different sampling densities.}
-% \end{figure}
-\end{frame}
-
-\begin{frame}
-\frametitle{Semantic Scene Labeling on ScanNet Dataset}
+\frametitle{Semantic Scene Labeling Experiment on ScanNet Dataset}
 \begin{itemize}
     \item Goal: Predict semantic labels for points in indoor scans.
     \item Compared with baselines on the ScanNet dataset.
@@ -172,16 +151,32 @@
 % \end{figure}
 \end{frame}
 
+% \begin{frame}
+% \frametitle{Visualization of Feature Learning on 3D Point Clouds}
+% \begin{itemize}
+%     \item Visualization of learned 3D point cloud patterns from ModelNet40.
+%     \item Illustrates the network's ability to recognize various geometric features.
+% \end{itemize}
+% % \begin{figure}
+% %     \centering
+% %     \includegraphics[width=0.8\linewidth]{example-image-e} % Replace with actual image
+% %     \caption{Learned patterns highlighting planes, lines, and corners.}
+% % \end{figure}
+% \end{frame}
+
 \begin{frame}
-\frametitle{Visualization of Feature Learning on 3D Point Clouds}
+\frametitle{Point Set Classification in Non-Euclidean Metric Space}
 \begin{itemize}
-    \item Visualization of learned 3D point cloud patterns from ModelNet40.
-    \item Illustrates the network's ability to recognize various geometric features.
+    \item Metric Space and Intrinsic Features: Using geodesic distances to create a metric space and intrinsic features like WKS, HKS, enabling classification despite pose variations.
+
+    \item Methodology and Implementation: Constructs a geodesic metric space, samples and groups points based on this space, and uses PointNet++ to learn multi-scale intrinsic structures
+  
+    \item Performance and Results: Outperforms state-of-the-art approaches
 \end{itemize}
 % \begin{figure}
 %     \centering
-%     \includegraphics[width=0.8\linewidth]{example-image-e} % Replace with actual image
-%     \caption{Learned patterns highlighting planes, lines, and corners.}
+%     \includegraphics[width=0.8\linewidth]{example-image-d} % Replace with actual image
+%     \caption{Labeling accuracy comparison on real and virtual scans.}
 % \end{figure}
 \end{frame}
 

@@ -41,72 +41,47 @@
 % \frame{\titlepage}
 
 \begin{frame}
-\frametitle{Introduction to Equivariance}
+\frametitle{Introduction}
 \begin{itemize}
-    \item Importance of exploiting symmetry in data through equivariant functions.
-    \item Examples of symmetries: Translation in CNNs, Permutation in GNNs.
-    \item Focus on Euclidean group symmetries (E(3)) in tasks with 3D data.
-\end{itemize}
-\end{frame}
-
-\begin{frame}
-\frametitle{Current Limitations \& Our Contributions}
-\begin{itemize}
+    \item Deep learning should exploit symmetry in data.
+    \item Examples of network with symmetries: Translation in CNNs, Permutation in GNNs.
+    \item 3D data has Euclidean group symmetries (E(3)) that can be exploited.
     \item Current methods: Require higher-order representations; computationally expensive.
-    \item Our work: Presents a simpler, computationally efficient model.
-    \item Scalable to higher dimensions beyond 3D without a significant increase in computation.
+    \item This work: Presents a simpler, computationally efficient model with E(3). Also scalable to higher dimensions beyond 3D without a significant increase in computation.
 \end{itemize}
 \end{frame}
 
+% 3. Background %
 \begin{frame}
-\frametitle{The $\En$-Equivariant Graph Neural Network}
+\frametitle{Background: E(3) Equivariance}
 \begin{itemize}
-    \item Equivariant to rotations, translations, reflections, and permutations.
-    \item Avoids the use of spherical harmonics and other costly transformations.
-    \item Designed for simpler and more direct representation learning.
-\end{itemize}
-\end{frame}
+      \item \textbf{Equivariance:} Function $\phi: X \to Y$ respects transformations in its input space $X$, mirroring them in output space $Y$: \begin{itemize}
+      \item $\phi(T_g(\rmx)) = T_g(\phi(\rmx))$ where $T_g$ and $S_g$ are equivalent transformations associated with group $g$.\end{itemize}
+      \item \textbf{Key equivariance properties:} Translation, Rotation (Reflection), and Permutation Equivariance.
 
-
-
-
-\begin{frame}
-\frametitle{Applications \& Performance}
-\begin{itemize}
-    \item Applications: Dynamical systems, graph autoencoders, molecular property prediction.
-    \item Competitive performance in all tested applications, often outperforming existing models.
-    \item Example from QM9 dataset analysis shows superior predictive capabilities.
-\end{itemize}
-% % \includegraphics[width=0.8\textwidth]{Figures/overview_equivariance.pdf}
-\end{frame}
-
-
-% Background %
-\begin{frame}
-\frametitle{Background: Understanding Equivariance}
-\begin{itemize}
-      \item \textbf{Equivariance:} Function $\phi: X \to Y$ respects transformations in its input space $X$, mirroring them in output space $Y$.
-      \item \textbf{Key types in our model:} Translation, Rotation (Reflection), and Permutation Equivariance.
-      \item Equations for transformation: $\phi(T_g(\rmx)) = S_g(\phi(\rmx))$ where $T_g$ and $S_g$ are transformations associated with group $g$.
 \end{itemize}
 \end{frame}
 
 \begin{frame}
-\frametitle{Graph Neural Networks}
+\frametitle{Background: Graph Neural Networks}
 \begin{itemize}
       \item Graphs defined by nodes $(\mathcal{V})$ and edges $(\mathcal{E})$.
       \item Node embeddings evolve through layers using a message-passing scheme:
-    \begin{equation}
-    \rmh_i^{l+1} = \phi_h(\rmh_i^l, \sum_{j \in \mathcal{N}(i)} \phi_e(\rmh_i^l, \rmh_j^l, a_{ij}))
-    \end{equation}
-      \item Aggregation of messages and transformation are applied per node.
+      \begin{equation}
+        \begin{aligned}
+        \mathbf{m}_{i j} & =\phi_e\left(\mathbf{h}_i^l, \mathbf{h}_j^l, a_{i j}\right) \\
+        \mathbf{m}_i & =\sum_{j \in \mathcal{N}(i)} \mathbf{m}_{i j} \\
+        \mathbf{h}_i^{l+1} & =\phi_h\left(\mathbf{h}_i^l, \mathbf{m}_i\right)
+        \end{aligned}
+        \end{equation}
+      \item $\phi_e$ and $\phi_h$ are the edge and node operations often being MLPs. Aggregation of messages and transformation are applied per node.
 \end{itemize}
 \end{frame}
 
 \begin{frame}
 \frametitle{Equivariant Graph Neural Networks}
 \begin{itemize}
-      \item Our model enhances traditional GNNs by incorporating equivariance.
+      \item The paper's  model enhances traditional GNNs by incorporating equivariance.
       \item Updates node positions and features while maintaining structural and transformational integrity.
       \item \textbf{Key operation:} Equivariant updates of node positions using edge embeddings.
 \end{itemize}
@@ -119,21 +94,24 @@
 \begin{frame}
 \frametitle{Analysis on $E(n)$ Equivariance}
 \begin{itemize}
-      \item Formally proving that our model is equivariant under the $E(n)$ group.
-      \item Equations reflect transformations on node positions in an equivariant manner.
-      \item Focus on translational and rotational symmetry for node coordinates.
+      \item Proof of equivariance under the $E(n)$ group: $$Q \mathbf{x}^{l+1}+g, \mathbf{h}^{l+1}=\operatorname{EGCL}\left(Q \mathbf{x}^l+g, \mathbf{h}^l\right)$$.
+      \item Focus on translational and rotational symmetry for node coordinates: invariance translation, equivariance of rotation, etc. 
 \end{itemize}
 \end{frame}
 
 \begin{frame}
 \frametitle{Extending EGNNs for Vector Type Representations}
 \begin{itemize}
-      \item Incorporation of momentum for dynamic systems, enhancing the prediction of particle movement.
-      \item Adjustments to the model allow for initial velocity considerations, pivotal for simulations:
-    \begin{align}
+      \item Incorporation of momentum for dynamic systems, enhancing the prediction of particle movement, extending such that $\mathbf{h}^{l+1}, \mathbf{x}^{l+1}, \mathbf{v}^{l+1}=\operatorname{EGCL}\left[\mathbf{h}^l, \mathbf{x}^l, \mathbf{v}^{\text {init }}, \mathcal{E}\right]$. 
+      \item Coordinate update (eq. 3) in two steps: compute the velocity and then update the position:
+      \begin{equation}
+        \begin{aligned}
     \mathbf{v}_{i}^{l+1}&= \phi_{v}\left(\rmh_{i}^l\right)\rmv_{i}^\text{init} + C\sum_{j \neq i}\left(\mathbf{x}_{i}^{l}-\mathbf{x}_{j}^{l}\right) \phi_{x}\left(\mathbf{m}_{ij}\right) \\
     \rmx_{i}^{l+1} &=\mathbf{x}_{i}^{l}+ \mathbf{v}_i^{l+1}
-    \end{align}
+        \end{aligned}
+    \end{equation}
+        
+    \item Observations: $\phi_v$ maps $\mathbf{h}_i^l$ to a scalar value scaling velocity. Zero initial velocity $\left(\mathbf{v}_i^{\text {init }}=0\right)$, equation becomes same as eq. 3.
 \end{itemize}
 \end{frame}
 
@@ -143,52 +121,55 @@
       \item Addressing edge detection in unstructured data.
       \item Use of a soft-attention mechanism to infer connections:
     \begin{equation}
+        \begin{aligned}
+    \mathbf{m}_i=\sum_{j \in \mathcal{N}(i)} \mathbf{m}_{i j}=\sum_{j \neq i} e_{i j} \mathbf{m}_{i j} \\
     e_{ij} \approx \phi_{inf}(\rmm_{ij})
+        \end{aligned}
     \end{equation}
       \item Facilitates dynamic and adaptive network topology.
 \end{itemize}
 \end{frame}
-    
+
+% 4. Related Work %
 \begin{frame}
-\frametitle{Related Work Overview}
-\begin{itemize}
-    \item \textbf{General Equivariance:} Proven effective across a variety of tasks (Cohen et al., 2016; Weiler et al., 2019).
-    \item \textbf{E(3) and SE(3) Equivariance:}
+    \frametitle{Related Work Overview - Table 1}
     \begin{itemize}
-    \item Utilizing spherical harmonics for higher-order transformations (Thomas et al., 2018; Fuchs et al., 2020).
-    \item Challenges include computational expense and limitation to 3D spaces.
+        \item \textbf{General Equivariance:} (Cohen et al., 2016; Weiler et al., 2019).
+        \item \textbf{E(3) and SE(3) Equivariance:}
+        \begin{itemize}
+        \item Utilizing spherical harmonics for higher-order transformations (Thomas et al., 2018; Fuchs et al., 2020).
+        \item Computational expense and limitation to 3D spaces.
+        \end{itemize}
+        \item \textbf{Message Passing in Molecular Data:}
+        \begin{itemize}
+        \item Has permutation equivariance, but lacks translation or rotation (Gilmer et al., 2017).
+        \item $\En$ invariant networks considering relative distances (Schütt et al., 2017).
+        \end{itemize}
+        \item \textbf{Innovative Methods:} Incorporating angles and directional information through modified message passing (Klicpera et al., 2020).
+        % DimeNet
     \end{itemize}
-    \item \textbf{Message Passing in Molecular Data:}
-    \begin{itemize}
-    \item Focus on permutation equivariance, but lacks in handling translation or rotation (Gilmer et al., 2017).
-    \item Introduction of $\En$ invariant networks considering relative distances (Schütt et al., 2017).
-    \end{itemize}
-    \item \textbf{Innovative Methods:} Incorporating angles and directional information through modified message passing (Klicpera et al., 2020).
-\end{itemize}
 \end{frame}
 
 \begin{frame}
 \frametitle{Comparison with Existing Methods}
 \begin{itemize}
-    \item Comparative analysis of message passing mechanisms detailed in 
-    % \cite{gilmer2017neural}.
+    %\item Comparative analysis of message passing mechanisms detailed in \cite{gilmer2017neural}.
     \item \textbf{Distinguishing Features of EGNN:}
     \begin{itemize}
-    \item Unlike other methods, EGNN updates both node embeddings and coordinates, integrating feature propagation with spatial transformations.
+    \item Unlike other methods, EGNN updates both node embeddings and coordinates.
     \item Maintains $\En$ equivariance efficiently without costly operations like spherical harmonics.
     \end{itemize}
-    \item \textbf{Key Comparisons:}
+    \item \textbf{Some Comparisons:}
     \begin{itemize}
-    \item Radial Field method focuses solely on positional data, limiting feature dynamics across nodes.
-    \item Tensor Field Networks offer comprehensive feature propagation but at a high computational cost.
-    \item Our EGNN method provides a balance, retaining the flexibility of GNNs while adhering to $\En$ equivariance.
+    \item Radial Field (Kohler et al., 2019) method focuses solely on positional data, limiting feature dynamics across nodes.
+    \item Tensor Field Networks (Thomas et al., 2018) offer comprehensive feature propagation but at a high computational cost.
     \end{itemize}
 \end{itemize}
 % \includegraphics[width=0.8\textwidth]{Figures/comparison_table.pdf} % Assuming you have a comparative table figure
 \end{frame}
 
 \begin{frame}
-\frametitle{Modelling a Dynamical System: N-body Experiment}
+\frametitle{Experiment 1: Modelling a Dynamical System - N-body System}
 \begin{itemize}
     \item \textbf{Context:} Dynamical systems are fundamental in various domains such as control systems and physical simulations.
     \item \textbf{Experiment Setup:} Extended the Charged Particles N-body experiment to 3D. System involves 5 particles with charges, interacting through basic physical laws.
@@ -209,7 +190,7 @@
 
 
 \begin{frame}
-\frametitle{Graph Autoencoder}
+\frametitle{Experiment 2: Representation Learning - Graph Autoencoder}
 \begin{itemize}
     \item \textbf{Objective:} Learn unsupervised representations of graphs in a continuous latent space.
     \item \textbf{Approach:} Used EGNN to construct an Equivariant Graph Autoencoder.
@@ -218,10 +199,9 @@
 \end{frame}
     
 \begin{frame}
-\frametitle{Graph Autoencoder: Results}
+\frametitle{Graph Autoencoder: Implementation and Results}
 \begin{itemize}
-    \item \textbf{Implementation:} Autoencoder framework with EGNN encoder and a simple decoder for adjacency matrix reconstruction.
-    \item \textbf{Symmetry Problem:} Addressed symmetries in graphs without node features by introducing noise.
+    \item \textbf{Implementation:} Autoencoder framework with EGNN encoder and a simple decoder for adjacency matrix reconstruction. Addressed symmetries in graphs without node features by introducing noise.
     \item \textbf{Results:} Demonstrated superior performance in embedding and reconstructing graphs, significantly reducing errors.
 \end{itemize}
 % \includegraphics[width=0.8\textwidth]{Figures/autoencoder_results.png}
@@ -230,7 +210,7 @@
 
 
 \begin{frame}
-\frametitle{Molecular Data Prediction: QM9 Dataset}
+\frametitle{Experiment 2: Molecular Data Prediction - QM9 Dataset}
 \begin{itemize}
     \item \textbf{Dataset:} QM9, standard for chemical property prediction. Contains small molecules with varied atomic properties.
     \item \textbf{Task:} Predict 12 chemical properties, which are invariant to spatial transformations of molecule configurations.
@@ -241,7 +221,7 @@
 \begin{frame}
 \frametitle{QM9: Implementation and Results}
 \begin{itemize}
-    \item \textbf{Method:} EGNN implemented without updating particle positions, focusing on edge inference and molecular properties prediction.
+    \item \textbf{Implementation:} EGNN implemented without updating particle positions, focusing on edge inference and molecular properties prediction.
     \item Competitive results, achieving high accuracy across all tested properties, highlighting the model's efficacy and simplicity.
 \end{itemize}
 % \includegraphics[width=0.8\textwidth]{Figures/qm9_results.png}

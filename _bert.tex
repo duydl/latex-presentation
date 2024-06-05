@@ -16,102 +16,113 @@
 
 % Intro
 \begin{frame}
-\frametitle{Introduction to BERT}
+\frametitle{Introduction}
 \textbf{Context and Motivation:}
 \begin{itemize}
     \item Pre-training language models has significantly advanced the performance of many NLP tasks.
-    \item Typical tasks improved by language model pre-training include natural language inference, paraphrasing, named entity recognition, and question answering.
-    \item Pre-trained models enhance the understanding of language by analyzing relationships between sentences and producing fine-grained output at the token level.
 \end{itemize}
 \textbf{Existing Strategies:}
 \begin{itemize}
     \item Feature-based approach (e.g., ELMo): Integrates pre-trained representations as additional features into task-specific architectures.
-    \item Fine-tuning approach (e.g., OpenAI GPT): Adapts pre-trained models to downstream tasks with minimal task-specific parameters by fine-tuning all layers.
+    \item Fine-tuning approach (e.g., OpenAI GPT): Adapts to downstream tasks with minimal task-specific parameters by fine-tuning all layers.
 \end{itemize}
 \textbf{Limitations of Current Techniques:}
 \begin{itemize}
-    \item Constrained by unidirectionality in models which restricts the learning of contextual relationships essential for comprehensive language understanding, especially in token-level tasks.
+    \item Constrained by unidirectionality:  Restricts learning of contextual relationships essential for comprehensive language understanding, especially in token/sentence-level tasks such
+    as question answering.
 \end{itemize}
 \end{frame}
 
 \begin{frame}
-\frametitle{Introducing BERT: Bidirectional Encoder Representations from Transformers}
+\frametitle{BERT: Bidirectional Encoder Representations from Transformers}
 \textbf{Key Innovations of BERT:}
 \begin{itemize}
-    \item Overcomes the unidirectionality constraint by using a "masked language model" (MLM) pre-training objective, inspired by the Cloze task.
-    \item Enables the pre-training of deeply bidirectional Transformers by predicting the identity of masked tokens based on their context.
-    \item Incorporates a "next sentence prediction" task that jointly pre-trains text-pair representations.
+    \item Using a "masked language model" (MLM) pre-training objective for deep bidirectional Transformer.
+    \item Also incorporates a "next sentence prediction" task that jointly pre-trains text-pair representations.
 \end{itemize}
 \textbf{Contributions and Impact:}
 \begin{itemize}
-    \item Demonstrates the critical importance of bidirectional pre-training for language representations.
-    \item Simplifies the architecture requirements for specific NLP tasks by reducing the need for heavily-engineered, task-specific models.
-    \item Achieves state-of-the-art performance across a wide array of sentence-level and token-level NLP tasks, setting new benchmarks for eleven tasks.
-\end{itemize}
-\textbf{Availability:}
-\begin{itemize}
-    \item The BERT model's code and pre-trained configurations are openly shared for community use, promoting further research and application developments in natural language processing.
+    \item Demonstrates bidirectional pre-training for language representations.
+    \item Simplifies the architecture requirements for specific NLP tasks.
+    \item Achieves state-of-the-art performance across eleven tasks.
 \end{itemize}
 \end{frame}
     
 
 % Related
 \begin{frame}
-\frametitle{Related Work on Language Model Pre-training}
+\frametitle{Related Work}
 
 \textbf{Unsupervised Feature-based Approaches:}
 \begin{itemize}
-    \item Initial focus on word embeddings using non-neural and neural methods (Brown et al., 1992; Mikolov et al., 2013).
-    \item Evolution to sentence and paragraph embeddings with various training objectives, including:
-    \begin{itemize}
-        \item Ranking candidate next sentences.
-        \item Generating next sentence words from sentence representations.
-        \item Denoising auto-encoder objectives.
-    \end{itemize}
+    \item Initial focus on word embeddings
+    % (Brown et al., 1992; Mikolov et al., 2013).
+    % \item Evolution with various training objectives, including:
+    % \begin{itemize}
+    %     \item Ranking candidate next sentences.
+    %     \item Generating next sentence words from sentence representations.
+    %     \item Denoising auto-encoder objectives.
+    % \end{itemize}
     \item ELMo introduced context-sensitive features from bidirectional language models, significantly advancing NLP benchmarks.
 \end{itemize}
 
 \textbf{Unsupervised Fine-tuning Approaches:}
 \begin{itemize}
-    \item Early models only pre-trained word embeddings (Collobert and Weston, 2008).
+    \item Early models only pre-trained word embeddings 
+    % (Collobert and Weston, 2008).
     \item Development of contextual token representations pre-trained and fine-tuned from unlabeled text for downstream tasks:
-    \begin{itemize}
-        \item Combines advantages of fewer learn-from-scratch parameters and robust context awareness.
-        \item OpenAI GPT exemplifies success on the GLUE benchmark via left-to-right modeling.
-    \end{itemize}
+    % \begin{itemize}
+    %     \item Combines advantages of fewer learn-from-scratch parameters and robust context awareness.
+    %     \item OpenAI GPT exemplifies success on the GLUE benchmark via left-to-right modeling.
+    % \end{itemize}
 \end{itemize}
 
 \textbf{Transfer Learning from Supervised Data:}
-\begin{itemize}
-    \item Demonstrated effectiveness in NLP tasks with large datasets (e.g., natural language inference, machine translation).
-    \item Mirrored in computer vision, where fine-tuning from models pre-trained on large datasets like ImageNet has been crucial.
-\end{itemize}
+% \begin{itemize}
+%     \item Demonstrated effectiveness in NLP tasks with large datasets (e.g., natural language inference, machine translation).
+%     \item Mirrored in computer vision, where fine-tuning from models pre-trained on large datasets like ImageNet has been crucial.
+% \end{itemize}
 
 \end{frame}
 
+% BERT %
 % Slide 1: Overview of BERT's Framework
 \begin{frame}
-\frametitle{Overview of BERT's Framework}
-BERT (Bidirectional Encoder Representations from Transformers) introduces a novel approach in handling language representations by employing two main phases: \textbf{pre-training} and \textbf{fine-tuning}. During pre-training, BERT is trained on a large corpus of unlabeled data with two innovative tasks designed to capture the deep bidirectional context of language. Once pre-trained, BERT models are fine-tuned with labeled data specific to downstream tasks, adapting its versatile architecture to achieve state-of-the-art results across a wide range of NLP challenges.
+    \frametitle{Overview of BERT}
+    \begin{itemize}
+        \item Handles language representations through two main phases: \textbf{pre-training} and \textbf{fine-tuning}.
+        \item \textbf{Pre-training}
+            \begin{itemize}
+                \item Trained on a large corpus of unlabeled data.
+                \item Employs two tasks: Masked Language Modeling (MLM) and Next Sentence Prediction (NSP).
+                \item Captures deep bidirectional context of language.
+            \end{itemize}
+        \item \textbf{Fine-tuning}
+            \begin{itemize}
+                \item Uses labeled data specific to downstream tasks.
+                \item Adapts BERT's architecture to achieve state-of-the-art results.
+                \item Applicable to a wide range of NLP challenges.
+            \end{itemize}
+    \end{itemize}
 \end{frame}
 
 % Slide 2: BERT Model Architecture
 \begin{frame}
 \frametitle{BERT Model Architecture}
-BERT utilizes a multi-layer bidirectional Transformer encoder architecture, which is based on the original Transformer model but modified to support bidirectional context processing, critical for understanding the full scope of language semantics. Key configurations include:
+BERT based on the original Transformer model but modified to support bidirectional context processing. Key configurations include:
 \begin{itemize}
-    \item Number of layers (L): different versions have varying depths e.g., BERT BASE has 12 layers.
+    \item Number of layers (L)  e.g., BERT BASE has 12 layers.
     \item Hidden size (H): size of the hidden layers. BERT BASE uses 768.
     \item Self-attention heads (A): BERT BASE uses 12 attention heads.
     \item Total Parameters: BERT BASE has 110M parameters.
 \end{itemize}
-Unlike OpenAI GPT which uses a unidirectional architecture, BERT's bidirectional Transformer encoder allows each token to attend to all tokens in the input sequence, enhancing its context understanding.
+Unlike OpenAI GPT unidirectional architecture, BERT's bidirectional Transformer encoder allows each token to attend to all tokens in the input sequence.
 \end{frame}
 
 % Slide 3: Input/Output Representations
 \begin{frame}
 \frametitle{Input/Output Representations}
-BERT's input representation is designed to handle single sentences or a pair of sentences seamlessly by incorporating special tokens and embeddings:
+Designed to handle single sentences or a pair of sentences seamlessly by incorporating special tokens and embeddings:
 \begin{itemize}
     \item Special tokens: {\tt [CLS]} for classification tasks and {\tt [SEP]} for separating sentence pairs.
     \item Segment embeddings: distinguish between sentences in tasks involving comparisons.
@@ -130,42 +141,33 @@ The sum of these embeddings provides a rich representation of the input tokens, 
 \frametitle{Pre-training Tasks of BERT}
 BERT is pre-trained using two unsupervised tasks:
 \begin{itemize}
-    \item \textbf{Masked LM (MLM)}: Random tokens are masked in the input, and the model learns to predict them based on the context provided by the non-masked tokens.
-    \item \textbf{Next Sentence Prediction (NSP)}: BERT learns to predict if a sentence logically follows another, which is crucial for tasks that require understanding the relationship between sentences.
+    \item \textbf{Masked LM (MLM)}: Learns to predict randomly masked tokens in input based on the context provided by the non-masked tokens.
+    \item \textbf{Next Sentence Prediction (NSP)}: Learns to predict if a sentence logically follows another.
 \end{itemize}
-These pre-training tasks help BERT develop a profound understanding of language structure and context before any task-specific fine-tuning.
 \end{frame}
 
 % Slide 5: Fine-tuning Procedure
 \begin{frame}
 \frametitle{Fine-tuning Procedure}
-Post pre-training, BERT can be fine-tuned with just one additional output layer to create state-of-the-art models for a wide range of tasks, such as question answering and language inference. The fine-tuning adjusts all the pre-trained parameters to make them task-specific:
+Can be fine-tuned with just one additional output layer to create state-of-the-art models for a wide range of tasks. The fine-tuning adjusts all the pre-trained parameters to make them task-specific:
 \begin{itemize}
     \item Input during fine-tuning is adjusted according to the task (e.g., sentence pairs for NLI).
     \item The model outputs are tailored to the specific needs of the task, using the representations learned during pre-training.
 \end{itemize}
-Fine-tuning allows BERT to adapt to any specific task with minimal changes to the underlying model, demonstrating its versatility and power.
 \end{frame}
     
-% Slide 1: Introduction to GLUE Benchmark
 \begin{frame}
 \frametitle{GLUE Benchmark}
-The General Language Understanding Evaluation (GLUE) benchmark is a collection of diverse NLP tasks designed to evaluate and promote models' general language understanding capabilities. These tasks include question answering, sentiment analysis, and textual entailment among others. BERT is fine-tuned on each of these tasks using the representations learned during pre-training, with only a simple classification layer added for predictions.
-\end{frame}
-
-% Slide 2: Fine-tuning BERT on GLUE
-\begin{frame}
-\frametitle{Fine-tuning BERT on GLUE}
-Fine-tuning BERT on the GLUE tasks involves:
+The GLUE benchmark evaluates models' language understanding across diverse NLP tasks like question answering and sentiment analysis. BERT, fine-tuned on these tasks, uses pre-trained representations with a simple classification layer for predictions. Fine-tuning BERT involves:
 \begin{itemize}
-    \item Using the {\tt [CLS]} token's final hidden state as the input for classification.
-    \item Introducing a small number of new parameters specific to each task, mainly the classification layer weights.
-    \item Optimizing the model on each task's training data, with hyperparameters like learning rate selected based on the development set performance.
+    \item Using the {\tt [CLS]} token's final hidden state for classification.
+    \item Adding task-specific parameters, primarily the classification layer.
+    \item Optimizing on each task's training data with task-specific hyperparameters.
 \end{itemize}
-BERT's performance on GLUE significantly surpasses previous state-of-the-art models, demonstrating its effective transfer learning capabilities.
+BERT's performance on GLUE exceeds previous state-of-the-art models, showcasing its transfer learning capabilities.
 \end{frame}
+    
 
-% Slide 3: Introduction to SQuAD v1.1
 \begin{frame}
 \frametitle{SQuAD v1.1}
 The Stanford Question Answering Dataset (SQuAD v1.1) challenges models to answer questions based on content from Wikipedia articles, where the answer to each question is a segment of text, or "span", from the corresponding reading passage.
@@ -177,7 +179,6 @@ The Stanford Question Answering Dataset (SQuAD v1.1) challenges models to answer
 BERT's fine-tuning approach allows it to outperform previous models on SQuAD v1.1, achieving new state-of-the-art results.
 \end{frame}
 
-% Slide 4: Introduction to SQuAD v2.0
 \begin{frame}
 \frametitle{SQuAD v2.0}
 SQuAD v2.0 extends v1.1 by adding questions that do not have an answer in the provided passage, making it essential for models to determine not only the answers but also when no answer is supported by the text.
@@ -188,7 +189,7 @@ SQuAD v2.0 extends v1.1 by adding questions that do not have an answer in the pr
 This adjustment makes SQuAD v2.0 a more challenging and realistic task, which BERT handles effectively, significantly improving over prior best models.
 \end{frame}
 
-% Slide 5: Introduction to SWAG
+
 \begin{frame}
 \frametitle{SWAG}
 The Situations With Adversarial Generations (SWAG) dataset aims to evaluate a model's ability to predict the most plausible continuation of a sentence among four given options.
@@ -201,25 +202,24 @@ BERT's results on SWAG dramatically surpass previous approaches, underlining its
 
 % Concise Slide: Ablation Studies on BERT
 \begin{frame}
-\frametitle{Ablation Studies on BERT}
-\begin{itemize}
-    \item \textbf{Effect of Pre-training Tasks:}
+    \frametitle{Ablation Studies on BERT}
     \begin{itemize}
-        \item Removing NSP significantly decreases performance on tasks requiring understanding of sentence relationships (e.g., QNLI, MNLI).
-        \item Bidirectional models (MLM without NSP) perform better than unidirectional models (LTR \& No NSP) across all tasks, particularly on tasks like SQuAD and MRPC.
+        \item \textbf{Pre-training Tasks:}
+        \begin{itemize}
+            \item Removing NSP decreases performance on tasks needing sentence relationship understanding (e.g., QNLI, MNLI).
+            \item Bidirectional models (MLM) outperform unidirectional models (LTR) across tasks, especially SQuAD and MRPC.
+        \end{itemize}
+        \item \textbf{Model Size:}
+        \begin{itemize}
+            \item Larger models improve performance on GLUE tasks.
+            \item Scaling enhances feature and dependency capture, even for small-scale tasks.
+        \end{itemize}
+        \item \textbf{Feature-based vs. Fine-tuning:}
+        \begin{itemize}
+            \item Feature-based methods using BERT's layers are competitive, especially in NER task.
+            \item Fine-tuning generally outperforms.
+        \end{itemize}
     \end{itemize}
-    \item \textbf{Effect of Model Size:}
-    \begin{itemize}
-        \item Larger models consistently improve task performance across various GLUE tasks.
-        \item Model scaling shows substantial benefits even on small-scale tasks, enhancing the capacity to capture complex features and dependencies.
-    \end{itemize}
-    \item \textbf{Feature-based vs. Fine-tuning Approach:}
-    \begin{itemize}
-        \item Feature-based approaches using BERT's layers as fixed features provide competitive results, particularly in specialized tasks like NER.
-        \item Fine-tuning the entire model generally outperforms feature-based methods by leveraging adaptable, task-specific fine-tuning.
-    \end{itemize}
-\end{itemize}
-This analysis highlights the robust adaptability of BERT for a range of tasks, model sizes, and operational paradigms.
 \end{frame}
     
 

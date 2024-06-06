@@ -19,11 +19,11 @@
     % \cite{hughes2011principles, verkhivker2001binding, burley2019rcsb}
 \end{frame}
     
-\begin{frame}
-    \frametitle{Challenges in Drug Discovery}
-    The primary challenges in the early stages of drug discovery include the vast chemical space of potential molecules, estimated at around $10^{33}$ chemically valid structures, and the computational expense of drug-target affinity (DTA) predictions. Traditional methods involve computationally intensive simulations that are impractical on a large scale, highlighting a crucial need for efficient computational techniques to predict and validate drug-likeness and binding affinities quickly.
-    % \cite{verkhivker2001binding, burley2019rcsb}
-\end{frame}
+% \begin{frame}
+%     \frametitle{Challenges in Drug Discovery}
+%     The primary challenges in the early stages of drug discovery include the vast chemical space of potential molecules, estimated at around $10^{33}$ chemically valid structures, and the computational expense of drug-target affinity (DTA) predictions. Traditional methods involve computationally intensive simulations that are impractical on a large scale, highlighting a crucial need for efficient computational techniques to predict and validate drug-likeness and binding affinities quickly.
+%     % \cite{verkhivker2001binding, burley2019rcsb}
+% \end{frame}
     
 \begin{frame}
     \frametitle{Deep Generative Models for Drug Design}
@@ -34,7 +34,7 @@
 
 \begin{frame}
     \frametitle{Protein Representation Learning}
-    Proteins can be represented as sequences of amino acids, 2D graphs at residue level, or 3D point clouds at atom level. Advanced methods leverage language models, graph neural networks (GNNs), and convolutional neural networks (CNNs) to learn from these representations.
+    Proteins can be represented as sequences of amino acids, 2D graphs at residue level, or 3D point clouds at atom level. Advanced methods leverage language models (sequential modal), graph neural networks (GNNs), and convolutional neural networks (CNNs) (graph modal) to learn from these representations.
     
     % \cite{pmlr-v162-notin22a, 10.1093/bioinformatics/btac020, asgari2019probabilistic, WU202118, 10.1093/bioinformatics/bty178, NEURIPS2019_03573b32, townshend2020atom3d, jing2021equivariant, jing2021learning, 10.1093/nargab/lqac004}
 \end{frame}
@@ -60,6 +60,11 @@
     VAEs consist of a generative model and an inference model, using a probabilistic decoder and a prior to define a joint distribution between latent variables and data. Conditional VAEs integrate auxiliary covariates to enhance generative modeling, trained to maximize the conditional evidence lower bound (ELBO).
     
     % \cite{kingma2013auto, NIPS2015_8d55a249, Zheng_2019_CVPR, ivanov2018variational, wan2021high}
+    \begin{figure}[t]
+        \centering
+        \includegraphics[width = 10cm]{./media/_vae_4_protein/target_vae.pdf}
+        \caption{VAE}
+    \end{figure}
 \end{frame}
     
 
@@ -69,11 +74,11 @@
     
     % On the graph, nodes and edges are attributed by scalar and vector features $(s, V)$, which are propagated on the graph via a message-passing network with GVP modules. The processed invariant features $s$ are then moved to an efficient Transformer encoder to learn pairwise relations between residues. For sequence modeling, each residue is regarded as a token in the long protein sequence, and an efficient Transformer-based language model is used to learn their representations. Representations of residues are aggregated to produce representation vectors for the entire protein in both pipelines; then, these two vectors are concatenated and moved to dense layers to obtain the final representation.
     
-    % \begin{figure}[t]
-    %     \centering
-    %     \includegraphics[scale = 0.3]{Figure/pmn.pdf}
-    %     \caption{Overview of our Protein Multimodal Network (PMN).}
-    % \end{figure}
+    \begin{figure}[t]
+        \centering
+        \includegraphics[width = 10cm]{./media/_vae_4_protein/pmn.pdf}
+        \caption{Overview of Protein Multimodal Network (PMN).}
+    \end{figure}
 \end{frame}
 
 \begin{frame}
